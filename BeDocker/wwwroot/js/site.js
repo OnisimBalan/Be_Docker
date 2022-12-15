@@ -38,7 +38,7 @@ async function getData(url = '') {
 
 function fetchGiphs() {
     const searchTerm = $(".input-for-giphy").val();
-    const limit = 10;
+    const limit = 20;
     //my key from giphy dev-mod
     const key = "t8FZGHkgkH0CuZSmOv1RLK2NxGzbjgH0";
 

@@ -1,11 +1,6 @@
 ﻿using BeDocker.Models;
 using BeDocker.Repositoies;
-using Microsoft.AspNetCore.Connections;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Web;
 
 namespace BeDocker.Controllers
 {
@@ -50,7 +45,6 @@ namespace BeDocker.Controllers
             }
 
             return Ok();
-
         }
 
         public IActionResult GetAllSearchHistory()
