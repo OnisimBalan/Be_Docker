@@ -122,3 +122,36 @@ body {
     text-decoration:none;
     height:40px;
 }
+
+.btn-enter{
+    width:180px !important;
+}
+
+.btn-w {
+    width:100px!important;
+    text-align:center;
+}
+
+.number-class {
+    margin-left: 30px !important;
+    padding: 5px;
+    border-radius:5px;
+}
+
+.input-count {
+    width: 40px;
+    margin-left:5px;
+    border-radius: 5px;
+    border-color: #0d6efd;
+    border: 1px solid #0d6efd;
+}
+
+    .input-count:focus-visible {
+        box-shadow:0px 0px 3px 0px #0d6efd;
+        outline: none ;
+        background-color: white;
+    }
+
+a {
+    text-decoration-line: none;
+}

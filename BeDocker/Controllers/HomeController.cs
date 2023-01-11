@@ -26,6 +26,11 @@ namespace BeDocker.Controllers
             return View();
         }
 
+        public IActionResult Chat()
+        {
+            return View();
+        }
+
         public IActionResult AddSearchHistory([FromBody] AddSearchHistoryModel model)
         {
             if (!ModelState.IsValid)
