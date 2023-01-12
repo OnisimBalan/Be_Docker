@@ -180,7 +180,6 @@ function fetchVideos() {
         PostVideosToDataBase(searchTerm, dataArray);
         showVideos(dataArray);
     })
-    .catch(error => console.log(error));
 }
 
 function showVideos(dataArray) {
@@ -209,51 +208,61 @@ function PostVideosToDataBase(searchTerm, dataArray) {
 //4
 function fetchText() {
     const searchTerm = $(".input-for-text").val();
-    const count = $(".input-count").val();
+    var maxChars = 100;
     const key = "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";
-
-    if (count <= 0) {
-        alert("Count must be higher than 0!");
-        count = 1;
-    }
+    const url = `https://ro.wikipedia.org/wiki/${searchTerm}`;
 
     if (searchTerm == '') {
         return;
     }
 
-    try {
-        const aiResponse = fetch("https://chat.openai.com/backend-api/conversation", {
-            "headers": {
-                "authority": "chat.openai.com",
-                authorization: key,
-            },
-            "body": JSON.stringify({
-                "messages": [{
-                    "id": "ffa75905-d80e-4c74-bbd1-7adfe6ba523e",
-                    "role": "user",
-                    "content": { "content_type": "text", "parts": searchTerm }
-                }],
-                "conversation_id": "ab21dc8c-39d4-4589-90b6-ff5c5af364e3",
-                "parent_message_id": "577372cf-a7f5-425e-8723-5d46bb98b7b0",
-                "model": "text-davinci-002-render"
-            }),
-            auth: {
-                "auth_header_name": "Authorization"
-            },
-            "method": "POST",
-            mode:"no-cors"
-        });
+    fetch(url, {
 
-        if (aiResponse.status === 200) {
-            let dataArray = aiResponse.messages;
-            console.log(resp);
-            PostTextToDataBase(searchTerm, dataArray);
-            showText(dataArray);
-        }
-    } catch (exception) {
-        console.log(`Exception Occurred`);
-        console.error(exception);
-    }
+    }).then(response => {
+        if (!response.ok) throw Error(response.statusText);
+        console.log(response.statusText);
+        return response.json();
+    })
+    .then(resp => {
+        let dataArray = resp.messages;
+         console.log(resp);
+         PostTextToDataBase(searchTerm, dataArray);
+         showText(dataArray);
+    })
+
+    //try {
+    //    const aiResponse = fetch("https://chat.openai.com/backend-api/conversation", {
+    //        "headers": {
+    //            "authority": "chat.openai.com",
+    //            authorization: key,
+    //        },
+    //        "body": JSON.stringify({
+    //            "messages": [{
+    //                "id": "ffa75905-d80e-4c74-bbd1-7adfe6ba523e",
+    //                "role": "user",
+    //                "content": { "content_type": "text", "parts": searchTerm }
+    //            }],
+    //            "conversation_id": "ab21dc8c-39d4-4589-90b6-ff5c5af364e3",
+    //            "parent_message_id": "577372cf-a7f5-425e-8723-5d46bb98b7b0",
+    //            "model": "text-davinci-002-render"
+    //        }),
+    //        auth: {
+    //            "auth_header_name": "Authorization"
+    //        },
+    //        "method": "POST",
+    //        mode:"no-cors"
+    //    });
+
+    //    if (aiResponse.status === 200) {
+    //        let dataArray = aiResponse.messages;
+    //        console.log(resp);
+    //        PostTextToDataBase(searchTerm, dataArray);
+    //        showText(dataArray);
+    //    }
+    //} catch (exception) {
+    //    console.log(`Exception Occurred`);
+    //    console.error(exception);
+    //}
 }
 
 function showText(dataArray) {
