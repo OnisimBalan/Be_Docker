@@ -181,7 +181,7 @@ function showPhotos(dataArray) {
         i++;
         output += `
         <div class="img_element">
-            <a href="${imgData.pageURL}">Car ${i}</a>
+            <a href="${imgData.pageURL}">Photo - ${i}</a>
         </div>
     `;
     });
