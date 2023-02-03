@@ -68,6 +68,7 @@ function showGiphs(dataArray) {
     let output = '<div class="container">';
 
     dataArray.forEach((imgData) => {
+        console.log(imgData.images.fixed_width.url);
         output += `
         <div class="img_element">
             <img src="${imgData.images.fixed_width.url}"/>
@@ -88,50 +89,99 @@ function PostGiphsToDataBase(searchTerm, dataArray) {
 }
 
 //2
+//function fetchPhotos() {
+//    const searchTerm = $(".input-for-giphy").val();
+//    const count = $(".input-count").val();
+//    if (count <= 0) {
+//        alert("Count must be higher than 0!");
+//        count = 1;
+//    }
+
+//    if (searchTerm == '') {
+//        return;
+//    }
+
+//    const auth = '563492ad6f91700001000001613b614ca4774644baa22795c9cb1c49';
+//    const url = `https://api.pexels.com/v1/search?query=${searchTerm}&per_page=${count}&page=1`;
+
+//    fetch(url, {
+//        headers: {
+//            'Authorization': '563492ad6f91700001000001613b614ca4774644baa22795c9cb1c49'
+//        }
+//    }).then(resp => {
+//        if (!resp.ok) throw Error(resp.statusText);
+//        console.log(resp);
+//        return resp.json();
+//    })
+//        .then(resp => {
+//        let dataArray = resp;
+//       // PostPhotosToDataBase(searchTerm, dataArray);
+//        showPhotos(dataArray);
+//    })
+//    .catch(error => console.log(error));
+//}
+
+//function showPhotos(dataArray) {
+//    let output = '<div class="container">';
+//    console.log(dataArray.photos[0].url);
+//    for (var i = 0; i < dataArray.photos.length; i++) {
+
+//        console.log(dataArray.photos[i].url);
+//        output += `
+//        <div class="img_element">
+//            <iframe style="height:600px;width:600px;"
+//                src="${dataArray.photos[i].url}">
+//            </iframe>
+//        </div>
+//    `;
+//    }
+
+
+//    document.querySelector('.main-table').innerHTML = output;
+//}
+
 function fetchPhotos() {
     const searchTerm = $(".input-for-giphy").val();
     const count = $(".input-count").val();
     if (count <= 0) {
         alert("Count must be higher than 0!");
-        count = 1;
+        count = 0;
     }
+    var temp = 2;
+    
+    temp = temp +  count;
 
     if (searchTerm == '') {
         return;
     }
-    
+
     const url = `https://api.unsplash.com/search/photos?query=${searchTerm}&per_page=${count}&client_id=yoLuxVKikO3J_03bLNOxA-Llbhv4P7G0kG4hKgg3YQ0`;
 
-    fetch(url, {
-        headers: {
-            "content-type": "application/json",
-            'Access-Control-Allow-Credentials': true,
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET',
-            'Access-Control-Allow-Headers': 'application/json',
-        },
-        auth: {
-            "auth_header_name": "Authorization"
-        },
-    }).then(response => {
-        if (!response.ok) throw Error(response.statusText);
-        return response.json();
+    var API_KEY = '15387886-90d5d9ae993bf26ebedf0f671';
+    var URL = "https://pixabay.com/api/?key=" + API_KEY + "&q=" + searchTerm + "&per_page=" + temp;
+    fetch(URL, {
+    }).then(resp => {
+        if (!resp.ok) throw Error(resp.statusText);
+        console.log(resp);
+        return resp.json();
     })
-    .then(resp => {
-        let dataArray = resp.results;
-        PostPhotosToDataBase(searchTerm, dataArray);
+        .then(resp => {
+            let dataArray = resp;
+            console.log(resp);
+       // PostPhotosToDataBase(searchTerm, dataArray);
         showPhotos(dataArray);
     })
-    .catch(error => console.log(error));  
-}    
+    .catch(error => console.log(error));
+}
 
 function showPhotos(dataArray) {
     let output = '<div class="container">';
-
-    dataArray.forEach((imgData) => {
+    var i = 0;
+    dataArray.hits.forEach((imgData) => {
+        i++;
         output += `
         <div class="img_element">
-            <a>${imgData.links.html}</a>
+            <a href="${imgData.pageURL}">Car ${i}</a>
         </div>
     `;
     });
@@ -139,9 +189,15 @@ function showPhotos(dataArray) {
     document.querySelector('.main-table').innerHTML = output;
 }
 
+
 function PostPhotosToDataBase(searchTerm, dataArray) {
-   
-    var obj = { Key: searchTerm, Links: dataArray.map(t => t.links.html) };
+    var obj = {};
+
+    console.log(dataArray);
+
+    for (var i = 0; i < dataArray.length; i++) {
+        obj.push({ Key: searchTerm, Links: dataArray.map(t => t.photos[i].url) });
+    }
     
     postData("/Home/AddSearchHistory", obj)
         .then((data) => {
@@ -188,7 +244,9 @@ function showVideos(dataArray) {
     dataArray.forEach((Data) => {
         output += `
         <div class="img_element">
-            <a src="">${Data.url}</a>
+            <iframe  style="height:600px;width:600px;"
+                src="${Data.url}">
+            </iframe>
         </div>
     `;
         console.log(Data.url);
@@ -271,7 +329,7 @@ function showText(dataArray) {
     dataArray.forEach((Data) => {
         output += `
         <div class="img_element">
-            <source src="${Data.url}" type="video/mp4"/>
+            <span>${Data.url}</span>
         </div>
     `;
         console.log(Data.url);
